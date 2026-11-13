@@ -1,0 +1,30 @@
+Vehicles that go up properly. When a fuelled car, boat or motorbike (or a fuel pump) explodes, it doesn't just go dark: it blows apart, hurts whoever is too close, and leaves something worth looking at.
+
+[h2]What an explosion does[/h2]
+[list]
+[*] A fireball, and vanilla's fuel pump blast and sound over the vehicle.
+[*] The blast hurts: up to 60 health and shock within a couple of metres, falling to nothing at 8 m. Players flinch, cry out and see the red flash; infected and animals take more. (Vanilla's blast barely scratches a player.)
+[*] Everything in the vehicle is badly damaged.
+[*] Cars (Niva, Golf, Olga, Sarka, Humvee, M3S) become the burnt-out wreck of the same model and colour, with their cargo thrown out around them; a burnt wheel and the hood fly off at 45 degrees and land 8-10 m away.
+[*] Boats lose their outboard motor - blown off the stern to splash down and sink - and the burnt, burst hull sinks where the boat was. Anything in the boat goes in the water.
+[*] Motorbikes fly apart: wheels, fenders, exhaust and shields flung every which way.
+[*] Wrecks and flying bits are gone at restart (the economy respawns vehicles as usual); thrown-out cargo stays like any dropped loot.
+[/list]
+
+[h2]What sets it off[/h2]
+Better Explosions is a library: it makes the explosion, other mods decide when. Right now that's [b]Molotov[/b] - a fuelled vehicle caught in a molotov fire goes up. Planned: vanilla explosives (landmines, the grenade launcher, C4, maybe grenades) setting vehicles off with no other mod needed.
+
+DayZ Expansion's vehicles: add [b]Better Explosions - Expansion Vehicles[/b].
+
+[h2]For modders[/h2]
+Server side: BetterExplosions.Explode(vehicleOrPump) blows it up now; BetterExplosions.CanExplode(obj) says whether it would; BetterExplosions.BlastPeople(source, position) is just the blast's hit on the living. BetterExplosionsWreck.Add(carClass, wreckClass, turn) and BetterExplosionsWreck.Fling(carClass, pieceClass, onEdge) give more vehicles a wreck and burnt bits that fly off it. Source: https://github.com/jasonuithol/DayZBetterExplosions
+
+[h2]For server owners[/h2]
+[b]Install[/b] (paths relative to the server's install folder, shown as DayZServer/)
+[olist]
+[*] Put the mod's folder in the server's install folder as DayZServer/@BetterExplosions.
+[*] Add it to the server's launch parameter, before the mods that use it: -mod=...;@BetterExplosions;@Molotov
+[*] Copy the key file DayZServer/@BetterExplosions/keys/tarbaby.bikey into DayZServer/keys/ if it isn't there already (Molotov and the Hand Truck mods use the same key).
+[*] Restart the server.
+[/olist]
+Players only need to subscribe; the DayZ launcher loads the mod for them. Server and client.
