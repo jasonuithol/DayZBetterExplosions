@@ -1,0 +1,2 @@
+# Better Explosions on its own: vanilla explosives set the vehicles off.
+local @BetterExplosions

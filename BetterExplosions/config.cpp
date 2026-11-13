@@ -2,7 +2,7 @@ class CfgPatches
 {
 	class BetterExplosions
 	{
-		units[] = {"BetterExplosionsFireball", "BetterExplosions_BoatHull", "BetterExplosions_BoatEngine", "BetterExplosions_HatchbackWheel", "BetterExplosions_HatchbackHood", "BetterExplosions_Hatchback_02_Wheel", "BetterExplosions_Hatchback_02_Hood", "BetterExplosions_CivSedanWheel", "BetterExplosions_CivSedanHood", "BetterExplosions_Sedan_02_Wheel", "BetterExplosions_Sedan_02_Hood", "BetterExplosions_Offroad_02_Wheel", "BetterExplosions_Offroad_02_Hood", "BetterExplosions_Truck_01_Wheel", "BetterExplosions_Truck_01_Hood", "BetterExplosions_Motorbike_01_Wheel_1", "BetterExplosions_Motorbike_01_Wheel_2", "BetterExplosions_Motorbike_01_Fender", "BetterExplosions_Motorbike_01_Exhaust", "BetterExplosions_Motorbike_02_Wheel_1", "BetterExplosions_Motorbike_02_Wheel_2", "BetterExplosions_Motorbike_02_FenderFront", "BetterExplosions_Motorbike_02_FenderRear", "BetterExplosions_Motorbike_02_Exhaust", "BetterExplosions_Motorbike_02_Windshield", "BetterExplosions_Motorbike_02_ShieldLeft", "BetterExplosions_Motorbike_02_ShieldRight", "BetterExplosions_RotorBlade"};
+		units[] = {"BetterExplosionsFireball", "BetterExplosionsBurning", "BetterExplosions_BoatHull", "BetterExplosions_BoatEngine", "BetterExplosions_HatchbackWheel", "BetterExplosions_HatchbackHood", "BetterExplosions_Hatchback_02_Wheel", "BetterExplosions_Hatchback_02_Hood", "BetterExplosions_CivSedanWheel", "BetterExplosions_CivSedanHood", "BetterExplosions_Sedan_02_Wheel", "BetterExplosions_Sedan_02_Hood", "BetterExplosions_Offroad_02_Wheel", "BetterExplosions_Offroad_02_Hood", "BetterExplosions_Truck_01_Wheel", "BetterExplosions_Truck_01_Hood", "BetterExplosions_Motorbike_01_Wheel_1", "BetterExplosions_Motorbike_01_Wheel_2", "BetterExplosions_Motorbike_01_Fender", "BetterExplosions_Motorbike_01_Exhaust", "BetterExplosions_Motorbike_02_Wheel_1", "BetterExplosions_Motorbike_02_Wheel_2", "BetterExplosions_Motorbike_02_FenderFront", "BetterExplosions_Motorbike_02_FenderRear", "BetterExplosions_Motorbike_02_Exhaust", "BetterExplosions_Motorbike_02_Windshield", "BetterExplosions_Motorbike_02_ShieldLeft", "BetterExplosions_Motorbike_02_ShieldRight", "BetterExplosions_RotorBlade"};
 		weapons[] = {};
 		requiredVersion = 0.1;
 		requiredAddons[] = {"DZ_Data", "DZ_Scripts", "DZ_Vehicles_Wheeled", "DZ_Vehicles_Singletrack", "DZ_Vehicles_Water"};
@@ -40,6 +40,14 @@ class CfgVehicles
 
 	//! A vehicle going up: the fireball (particles on the clients), invisible itself
 	class BetterExplosionsFireball: HouseNoDestruct
+	{
+		scope = 1;
+		model = "\DZ\data\lightpoint.p3d";
+	};
+
+	//! A vehicle that's gone up, burning for a minute (flames are particles), unless another
+	//! mod lights its own fire
+	class BetterExplosionsBurning: HouseNoDestruct
 	{
 		scope = 1;
 		model = "\DZ\data\lightpoint.p3d";

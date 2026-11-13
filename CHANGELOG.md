@@ -2,8 +2,12 @@
 
 ## 0.1 - 2026-11-13
 
-First release: the vehicle explosions from the Molotov mod (0.4 to 0.5), as a library any
-mod can set off.
+First release: the vehicle explosions from the Molotov mod (0.4 to 0.5), on their own.
+
+- Vanilla explosives set fuelled vehicles off: landmines, the M79's 40 mm explosive round,
+  C4 (and IEDs with C4), and hand grenades going off right against or under a vehicle.
+- A vehicle that's gone up burns for a minute, hurting whoever stands in it (not when
+  another mod lights its own fire: `s_OwnFire`, `Event_OnExploded`).
 
 - `BetterExplosions.Explode(obj)` blows up a fuelled vehicle or a working fuel pump:
   vanilla's fuel pump blast and sound over it, a fireball, everything in it badly damaged,
