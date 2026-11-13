@@ -24,6 +24,7 @@ class BXCase
 	bool m_WantUp;
 	vector m_At;
 	Transport m_Spawned;
+	EntityAI m_Body;   //!< a dead zombie lying against it (the first case): must not end up under the wreck
 
 	void BXCase(string vehicle, string how, bool wantUp)
 	{
@@ -196,7 +197,18 @@ class CustomMission: MissionServer
 			else
 				c.m_At = Ground(b + m_Along * along + m_Land * 14);
 			c.m_Spawned = SpawnVehicle(c.m_Vehicle, c.m_At, m_Along);
+			if (i == 0 && c.m_Spawned)
+			{
+				// a zombie tucked in under its left side, where the wreck will land on it
+				// (killed a little later: killing it as it spawns crashes the server)
+				vector box[2];
+				c.m_Spawned.GetCollisionBox(box);
+				vector lo = box[0];
+				vector tuck = Ground(c.m_Spawned.ModelToWorld(Vector(lo[0] + 0.4, 0, 0.3)));
+				GetGame().CreateObjectEx("ZmbM_HermitSkinny_Beige", tuck, ECE_PLACE_ON_SURFACE | ECE_INITAI | ECE_CREATEPHYSICS);
+			}
 		}
+		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(KillBody, 2500, false);
 		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(SetOff, 5000, false);
 	}
 
@@ -284,6 +296,19 @@ class CustomMission: MissionServer
 					left += " " + type;
 			}
 			bool ok = up == c.m_WantUp && (!up || burning > 0);
+			if (c == m_Cases[0])
+			{
+				string under = BodyUnder(c);
+				if (under != "")
+				{
+					ok = false;
+					left += " BODY UNDER " + under;
+				}
+				else
+				{
+					left += " body clear";
+				}
+			}
 			if (ok)
 				good++;
 			string verdict = "";
@@ -293,6 +318,49 @@ class CustomMission: MissionServer
 		}
 		Print("[BXTest] " + good + " of " + m_Cases.Count() + " good");
 		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(Quit, 2000, false);
+	}
+
+	void KillBody()
+	{
+		BXCase c = m_Cases[0];
+		// (CreateObjectEx hands back nothing for a zombie, so find it)
+		array<Object> near = new array<Object>;
+		GetGame().GetObjectsAtPosition(c.m_Spawned.GetPosition(), 5, near, null);
+		foreach (Object o : near)
+		{
+			if (DayZInfected.Cast(o))
+				c.m_Body = EntityAI.Cast(o);
+		}
+		if (c.m_Body)
+		{
+			c.m_Body.SetHealth("", "", 0);
+			Print("[BXTest] zombie by the " + c.m_Vehicle + " killed at " + c.m_Body.GetPosition());
+		}
+	}
+
+	//! the wreck the case's dead zombie is inside the footprint of, or "" (none / no body)
+	string BodyUnder(BXCase c)
+	{
+		if (!c.m_Body)
+			return "(body gone)";
+		vector p = c.m_Body.GetPosition();
+		array<Object> near = new array<Object>;
+		GetGame().GetObjectsAtPosition(p, 10, near, null);
+		foreach (Object o : near)
+		{
+			string type = o.GetType();
+			if (type.IndexOf("Land_Wreck_") != 0 && type.IndexOf("Land_wreck_") != 0)
+				continue;
+			vector box[2];
+			if (!o.GetCollisionBox(box))
+				continue;
+			vector lo = box[0];
+			vector hi = box[1];
+			vector at = o.WorldToModel(p);
+			if (at[0] > lo[0] && at[0] < hi[0] && at[2] > lo[2] && at[2] < hi[2])
+				return type;
+		}
+		return "";
 	}
 
 	void Quit()

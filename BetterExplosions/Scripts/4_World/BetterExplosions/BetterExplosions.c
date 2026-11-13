@@ -1,6 +1,9 @@
 //! Tunables
 class BetterExplosionsSettings
 {
+	//! the chance each of the dead in a car is thrown out as it goes up (the rest stay
+	//! in their seats, to be pulled out)
+	static const float EJECT_CHANCE = 0.5;
 	static const string BLAST_AMMO = "LandFuelFeed_Ammo";   //!< vanilla's fuel pump explosion (its blast on objects, and its sound)
 	static const float BLAST_HEALTH = 60;        //!< what the blast does to a player (and shock) within BLAST_FULL m of it...
 	static const float BLAST_FULL = 2;

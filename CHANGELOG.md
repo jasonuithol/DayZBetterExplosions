@@ -6,6 +6,10 @@ First release: the vehicle explosions from the Molotov mod (0.4 to 0.5), on thei
 
 - Vanilla explosives set fuelled vehicles off: landmines, the M79's 40 mm explosive round,
   C4 (and IEDs with C4), and hand grenades going off right against or under a vehicle.
+- The dead in a car that goes up: each has a 50% chance of being thrown out beside the
+  wreck; the rest stay in their seats, and the vanilla "pull out body" works on them
+  (the car is kept on, out of sight inside its wreck, until its seats are empty). Anyone
+  lying where the wreck lands is moved out from under it.
 - A vehicle that's gone up burns for a minute, hurting whoever stands in it (not when
   another mod lights its own fire: `s_OwnFire`, `Event_OnExploded`).
 

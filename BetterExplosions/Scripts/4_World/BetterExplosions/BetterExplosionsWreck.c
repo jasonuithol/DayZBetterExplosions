@@ -299,7 +299,75 @@ class BetterExplosionsWreck
 			BetterExplosionsDebris.Throw(piece, start, dir, DEBRIS_SPEED * Math.RandomFloat(0.85, 1.25), rest);
 		}
 
-		Print("[BetterExplosions] " + car.GetType() + " is now " + type + " at " + wreck.GetPosition() + ", " + parts + " spare parts gone with it, thrown out:" + thrown);
-		GetGame().ObjectDelete(car);
+		// anyone in the wreck's footprint is put down beside it: a body under a wreck can't
+		// be got at. Anyone in a seat stays in it (see BetterExplosionsHulk)
+		Clear(wreck);
+		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(Clear, 1500, false, wreck);
+		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(Clear, 5000, false, wreck);
+		car.EjectBECrew(BetterExplosionsSettings.EJECT_CHANCE);
+		int seated = 0;
+		for (int cr = 0; cr < car.CrewSize(); cr++)
+		{
+			if (car.CrewMember(cr))
+				seated++;
+		}
+
+		Print("[BetterExplosions] " + car.GetType() + " is now " + type + " at " + wreck.GetPosition() + ", " + parts + " spare parts gone with it, " + seated + " still in it, thrown out:" + thrown);
+		if (seated > 0)
+			car.MakeBEHulk();
+		else
+			GetGame().ObjectDelete(car);
+	}
+
+	//! put the people and creatures (living or dead) inside a wreck's footprint down beside it
+	static void Clear(EntityAI wreck)
+	{
+		if (!wreck)
+			return;
+		vector box[2];
+		if (!wreck.GetCollisionBox(box))
+			return;
+		vector lo = box[0];
+		vector hi = box[1];
+		float reach = vector.Distance(lo, hi);
+		array<Object> near = new array<Object>;
+		GetGame().GetObjectsAtPosition3D(wreck.GetPosition(), reach, near, null);
+		foreach (Object o : near)
+		{
+			if (!Man.Cast(o) && !DayZCreatureAI.Cast(o))
+				continue;
+			EntityAI body = EntityAI.Cast(o);
+			if (body.GetParent())
+				continue;
+			vector at = wreck.WorldToModel(body.GetPosition());
+			float pad = 0.3;
+			if (at[0] < lo[0] - pad || at[0] > hi[0] + pad || at[2] < lo[2] - pad || at[2] > hi[2] + pad)
+				continue;
+			if (at[1] > hi[1] + 0.5)
+				continue;   // standing on the roof
+			// out through the nearest side
+			float dl = at[0] - lo[0];
+			float dr = hi[0] - at[0];
+			float db = at[2] - lo[2];
+			float df = hi[2] - at[2];
+			float least = Math.Min(Math.Min(dl, dr), Math.Min(db, df));
+			float clear = 0.7;
+			if (least == dl)
+				at[0] = lo[0] - clear;
+			else if (least == dr)
+				at[0] = hi[0] + clear;
+			else if (least == db)
+				at[2] = lo[2] - clear;
+			else
+				at[2] = hi[2] + clear;
+			vector to = wreck.ModelToWorld(at);
+			to = BetterExplosions.Ground(to);
+			body.SetPosition(to);
+			body.Update();
+			string state = "dead";
+			if (body.IsAlive())
+				state = "alive";
+			Print("[BetterExplosions] " + body.GetType() + " (" + state + ") moved out from under " + wreck.GetType() + " to " + to);
+		}
 	}
 }
