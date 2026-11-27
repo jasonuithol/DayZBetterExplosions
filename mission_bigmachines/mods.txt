@@ -1,0 +1,4 @@
+# Better Explosions with Big Machines: their bulldozer, excavator and combine go up into wrecks.
+local @BigMachines
+local @BetterExplosions
+local @BetterExplosions_BigMachines

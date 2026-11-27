@@ -1,0 +1,19 @@
+Add-on for [b]Better Explosions[/b]: Big Machines' bulldozers, excavators and combine harvesters go up like the vehicles do. When a fuelled machine explodes - set off by a landmine, a 40 mm round, C4, a grenade right against it, or with Molotov a fire reaching it - it's swapped for the wreck it was restored from, and burnt parts fly off it.
+
+[list]
+[*] Bulldozer: the bulldozer wreck, its track sprockets and burnt engine bits (radiator, exhaust, hoses, fan belt, control unit) flying
+[*] Excavator: the digger wreck, its track sprockets and the same engine bits flying
+[*] Combine harvester: the combine wreck, its wheels flying and its whole header thrown off the front
+[/list]
+Whoever was sitting in one when it went up stays in their seat to be pulled out, or is thrown clear, as in any vehicle. Tower cranes don't go up (no fuel tank). Wrecks are gone at the next restart, when Big Machines puts new machines in place of other wrecks.
+
+Requires: Better Explosions and Big Machines. Server and client.
+
+[b]Install[/b] (paths relative to the server's install folder, shown as DayZServer/)
+[olist]
+[*] Put the mod's folder in the server's install folder as DayZServer/@BetterExplosions_BigMachines.
+[*] Add it to the server's launch parameter, after Better Explosions and Big Machines: -mod=...;@BigMachines;@BetterExplosions;@BetterExplosions_BigMachines
+[*] Key: signed with the same key as Better Explosions and Big Machines (tarbaby.bikey); if DayZServer/keys/tarbaby.bikey is there already, there's nothing to copy.
+[*] Restart the server.
+[/olist]
+Players only need to subscribe; the DayZ launcher loads the mod for them.

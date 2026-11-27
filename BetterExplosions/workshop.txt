@@ -23,7 +23,7 @@ Afterwards it burns for a minute - stay out of the fire. Empty and wrecked vehic
 
 With [b]Molotov[/b], a molotov fire reaching a fuelled vehicle sets it off too, and Molotov's spreading fire takes the place of ours.
 
-DayZ Expansion's vehicles: add [b]Better Explosions - Expansion Vehicles[/b].
+DayZ Expansion's vehicles: add [b]Better Explosions - Expansion Vehicles[/b]. Big Machines' bulldozers, excavators and combines: add [b]Better Explosions - Big Machines[/b].
 
 [h2]For modders[/h2]
 Server side: BetterExplosions.Explode(vehicleOrPump) blows it up now; BetterExplosions.CanExplode(obj) says whether it would; BetterExplosions.BlastPeople(source, position) is just the blast's hit on the living. BetterExplosions.Event_OnExploded tells you whenever anything goes up; set BetterExplosions.s_OwnFire = false to light your own fire instead of ours. BetterExplosionsWreck.Add(carClass, wreckClass, turn) and BetterExplosionsWreck.Fling(carClass, pieceClass, onEdge) give more vehicles a wreck and burnt bits that fly off it. Source: https://github.com/jasonuithol/DayZBetterExplosions

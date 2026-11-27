@@ -78,6 +78,18 @@ rotor blade for the Huey). It names the vehicles as strings, so it needs nothing
 Expansion's scripts. It replaces the Molotov - Expansion Vehicles add-on, which now just
 requires it.
 
+## Better Explosions - Big Machines
+
+[`BetterExplosions_BigMachines/`](BetterExplosions_BigMachines), after BetterExplosions and
+[Big Machines](https://github.com/jasonuithol/DayZBigMachines): the bulldozer, excavator and
+combine harvester leave the vanilla wreck each was restored from (`StaticObj_Wreck_Bulldozer`,
+`StaticObj_Wreck_Digger`, `Land_Wreck_Harverster`) and fling Big Machines' own track
+sprockets and combine wheels, and the combine's header (vanilla's loose-header model). Big
+Machines keeps the map wreck a machine replaced sunk underground, re-sinking anything of that
+kind within 0.3 m of the spot every second, so a wreck left by a machine that never moved is
+nudged 0.6 m off the spot (`BM_Wrecks.BE_Clear`, 200 ms after the explosion: just after the
+swap). Tower cranes have no fuel and never go up.
+
 ## Layout
 
 | Path | What |
@@ -86,7 +98,10 @@ requires it.
 | `BetterExplosions/Scripts/4_World/BetterExplosions/` | `BetterExplosions.c` (settings, `Explode`, what sets it off, the blast, the fireball, the burning wreck), `BetterExplosionsTriggers.c` (vehicles hearing about explosive hits), `BetterExplosionsWreck.c` (cars to wrecks), `BetterExplosionsDebris.c` (flying and sinking bits, boats, motorbikes), `BetterExplosionsPain.c` |
 | `BetterExplosions/data/` | The burnt boat hull, outboard and rotor blade (MLOD, binarized by `tools/build.sh`) |
 | `BetterExplosions_Expansion/` | The Expansion add-on |
+| `BetterExplosions_BigMachines/` | The Big Machines add-on |
 | `mission/` | The test bed (`missions/betterexplosions.chernarusplus` in DayZMissions) |
+| `mission_bigmachines/` | The Big Machines add-on's test bed (`missions/bebigmachines.chernarusplus`) |
+| `tools/make_preview.py` | Draws the three Workshop previews |
 | `blender/build_debris.py` | Builds the debris models, `models/debris.blend` and a preview |
 | `tools/build.sh` | Binarizes and stages `build/BetterExplosions` |
 
@@ -112,10 +127,17 @@ motorbike, 40 mm by a boat) and checks which went up, left their wreck and burn
 (`[BXTest]`). Molotov's test beds (`molotov`, `molotov_expansion`) cover the wrecks, the
 flying bits and the blast's damage in more detail.
 
+[`mission_bigmachines/`](mission_bigmachines) (`missions/bebigmachines.chernarusplus`, with
+@BigMachines) parks a fuelled bulldozer, excavator and combine behind the same spawn and kit.
+`tools/test.sh bebigmachines` puts one of each on a wreck site of its own, as Big Machines
+does at a server start, blows each up where it stands and checks it left the right wreck,
+standing, with its parts flung (`[BXBMTest]`).
+
 ## Releasing
 
 Tag (`git tag -a v0.1 -m "Better Explosions 0.1"`), push, `tools/build.sh`, then from
 DayZMissions `tools/workshop_publish.sh BetterExplosions <steam login>` (twice the first
-time: the first run creates the item). Same for `BetterExplosions_Expansion`. On each
-item's Workshop page, add the required items: Better Explosions for the add-on and for
-Molotov; DayZ-Expansion-Vehicles for the add-on.
+time: the first run creates the item). Same for `BetterExplosions_Expansion` and
+`BetterExplosions_BigMachines`. On each item's Workshop page, add the required items:
+Better Explosions for the add-ons and for Molotov; DayZ-Expansion-Vehicles for the Expansion
+add-on, Big Machines for the Big Machines one.

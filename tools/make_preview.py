@@ -5,16 +5,21 @@ and a potted plant riding its shockwave. Writes an SVG; render it with the Bange
 
     make_preview.py out.svg              Better Explosions
     make_preview.py out.svg expansion    the Expansion Vehicles add-on: a Huey rotor blade, a
-                                         tractor tyre and a UAZ door, and the add-on's banner"""
+                                         tractor tyre and a UAZ door, and the add-on's banner
+    make_preview.py out.svg bigmachines  the Big Machines add-on: a crawler's track sprocket, an
+                                         excavator bucket and a combine's header, and its banner"""
 import math
 import random
 import sys
 
 W = H = 1024
-EXP = len(sys.argv) > 2 and sys.argv[2] == "expansion"
+VARIANT = sys.argv[2] if len(sys.argv) > 2 else ""
+EXP = VARIANT == "expansion"
+BIG = VARIANT == "bigmachines"
+FAT = "#cc8c14"            # Big Machines' construction yellow (FAT livery)
 CX, CY = 512, 462          # the blast
 RING = 290                 # the shockwave's radius
-if EXP:                    # room under it for the add-on's banner
+if EXP or BIG:             # room under it for the add-on's banner
     CY, RING = 432, 274
 INK = "#1a0d08"            # outline colour
 OUT = 7                    # outline width
@@ -122,7 +127,18 @@ for d in (-150, -90, -35, 150, 25):
 # --- what the wave is carrying -----------------------------------------------------------
 # a wheel: tyre with tread, steel rim, hub and nuts
 wheel = ['<circle r="62" fill="#26211f"/>']
-if EXP:
+if BIG:
+    # a crawler's track sprocket: a steel gear with square teeth, a yellow hub
+    wheel = []
+    for i in range(12):
+        a = math.degrees(2 * math.pi * i / 12)
+        wheel.append('<path d="M -11 -54 L -8 -74 L 8 -74 L 11 -54 Z" fill="#3a3a3a" '
+                     'stroke-width="5" transform="rotate(%.1f)"/>' % a)
+    wheel.append('<circle r="58" fill="#3a3a3a"/>')
+    wheel.append('<circle r="40" fill="#2a2a2a" stroke-width="4"/>')
+    wheel.append('<circle r="28" fill="%s"/>' % FAT)
+    wheel.append('<circle r="20" fill="#a86f0c" stroke-width="4"/>')
+elif EXP:
     # a tractor's back tyre: chevron lugs, red rim
     for i in range(14):
         a = math.degrees(2 * math.pi * i / 14)
@@ -189,7 +205,19 @@ door = (
     '<path d="M -70 60 C -50 50 -40 75 -20 64 C 0 54 10 80 30 68 C 50 58 60 82 78 70 L 78 90 L -70 90 Z" '
     'fill="#2a1c14" stroke-width="5"/>'
 )
-item(150, -24, door, 0.95)
+if BIG:
+    # an excavator bucket, FAT yellow, steel teeth along its lip, scorched
+    bucket = (
+        '<path d="M -80 -60 C -96 0 -70 70 -10 82 L 84 82 L 84 -20 C 40 -40 0 -70 -80 -60 Z" fill="%s"/>' % FAT +
+        '<path d="M -64 -40 C -76 4 -54 56 -8 66 L 66 66 L 66 -8 C 30 -24 -6 -48 -64 -40 Z" fill="#2a1c14" stroke-width="5"/>'
+        '<path d="M -80 -60 L -60 -84 L -20 -78 L -6 -64" fill="none" stroke-width="6"/>'
+        '<circle cx="-48" cy="-80" r="8" fill="#9aa0a3" stroke-width="4"/>'
+        '<path d="M 84 82 L 104 92 L 84 60 Z M 84 48 L 104 58 L 84 26 Z M 84 14 L 104 24 L 84 -8 Z" fill="#c9ced1" stroke-width="4"/>'
+        '<path d="M -10 82 C 20 70 40 90 84 74" fill="none" stroke="#7a5208" stroke-width="5"/>'
+    )
+    item(150, -24, bucket, 0.95)
+else:
+    item(150, -24, door, 0.95)
 
 # a bonnet: red, dented, a crease down the middle
 hood = (
@@ -199,7 +227,19 @@ hood = (
     '<path d="M -76 60 C -30 70 30 70 76 60 L 70 46 C 30 54 -30 54 -70 46 Z" fill="#2a1c14" stroke-width="5"/>'
     '<path d="M -60 -40 C -30 -50 10 -50 30 -48" fill="none" stroke="#f08a7e" stroke-width="6"/>'
 )
-if EXP:
+if BIG:
+    # a combine's header: the pale green trough with its auger, crop dividers at the ends
+    header = (
+        '<path d="M -150 -30 L 150 -30 L 160 30 L -160 30 Z" fill="#a9bd8e"/>'
+        '<path d="M -150 -30 L 150 -30 L 146 -14 L -146 -14 Z" fill="#7e9566" stroke-width="5"/>'
+        '<path d="M -160 30 L -186 20 L -150 -30 Z M 160 30 L 186 20 L 150 -30 Z" fill="#c8352a"/>'
+        '<path d="M -130 8 C -120 -10 -110 26 -100 8 C -90 -10 -80 26 -70 8 C -60 -10 -50 26 -40 8 '
+        'C -30 -10 -20 26 -10 8 C 0 -10 10 26 20 8 C 30 -10 40 26 50 8 C 60 -10 70 26 80 8 '
+        'C 90 -10 100 26 110 8 C 120 -10 130 26 130 8" fill="none" stroke="#e8e2c8" stroke-width="6"/>'
+        '<path d="M -40 30 C -20 18 0 40 30 26 C 50 18 70 38 90 30" fill="none" stroke="#2a1c14" stroke-width="6"/>'
+    )
+    item(25, 64, header, 0.85)
+elif EXP:
     # a Huey rotor blade, broken off at the root, yellow tip
     blade = (
         '<path d="M -150 -16 L 140 -16 C 158 -16 158 16 140 16 L -150 16 L -140 6 L -156 -2 L -142 -10 Z" fill="#4b5523"/>'
@@ -235,6 +275,21 @@ if EXP:
         '<text x="512" y="966" text-anchor="middle" font-family="Bangers" font-size="62" '
         'letter-spacing="5" fill="#f3ecd8" stroke="%s" stroke-width="9" stroke-linejoin="round" '
         'paint-order="stroke">+ EXPANSION VEHICLES</text></g>' % (INK, INK))
+elif BIG:
+    title("BETTER", 784, 100, "#ffe14a", -4)
+    title("EXPLOSIONS", 894, 132, "#ff9a1f", -4)
+    # the add-on's banner: a black and yellow hazard-striped plate under the name
+    stripes = "".join('<path d="M %d 906 L %d 906 L %d 982 L %d 982 Z" fill="%s"/>' % (x, x + 26, x - 12, x - 38, FAT)
+                      for x in range(150, 900, 52))
+    add('<defs><clipPath id="plate"><path d="M 150 906 L 874 906 L 900 944 L 874 982 L 150 982 L 124 944 Z"/></clipPath></defs>'
+        '<g transform="rotate(-4 512 944)">'
+        '<path d="M 150 906 L 874 906 L 900 944 L 874 982 L 150 982 L 124 944 Z" fill="#1d1a16"/>'
+        '<g clip-path="url(#plate)">%s</g>'
+        '<path d="M 150 906 L 874 906 L 900 944 L 874 982 L 150 982 L 124 944 Z" fill="none" '
+        'stroke="%s" stroke-width="8" stroke-linejoin="round"/>'
+        '<text x="512" y="968" text-anchor="middle" font-family="Bangers" font-size="66" '
+        'letter-spacing="6" fill="#ffe14a" stroke="%s" stroke-width="12" stroke-linejoin="round" '
+        'paint-order="stroke">+ BIG MACHINES</text></g>' % (stripes, INK, INK))
 else:
     title("BETTER", 858, 120, "#ffe14a", -4)
     title("EXPLOSIONS", 992, 160, "#ff9a1f", -4)
